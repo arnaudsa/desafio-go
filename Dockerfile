@@ -1,13 +1,11 @@
-FROM golang:1.19.2-alpine3.16 as builder
+FROM alpine:3.16 as builder
 
-WORKDIR /usr/src/app
-COPY go.mod ./
-RUN go mod download && go mod verify
+RUN apk update && apk add go
+WORKDIR /go/src/api
 COPY . .
-RUN go build -v -o /usr/local/bin/app ./...
+RUN go get -d -v && go build -ldflags "-s -w" -o bin/app
 
-
-FROM alpine:3.16
-WORKDIR /usr/local/bin/
-COPY --from=builder /usr/local/bin/app .
+FROM scratch
+WORKDIR /go/bin/
+COPY --from=builder /go/src/api/bin/app .
 ENTRYPOINT ["./app"]

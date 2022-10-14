@@ -9,6 +9,7 @@ docker pull arnaudsa/desafio-go
 ```
 
 Executando a imagem
+
 ```console
 docker run -d --name desafio-go arnaudsa/desafio-go && docker logs desafio-go
 ```
